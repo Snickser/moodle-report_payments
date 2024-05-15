@@ -98,7 +98,7 @@ class payment extends base {
         $tablealias = $this->get_table_alias('payments');
         $name = $this->get_entity_name();
 
-        $columns[] = (new column('id', new lang_string('paymentid'), $name))
+        $columns[] = (new column('id', new lang_string('paymentid', 'plugin'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.id")
