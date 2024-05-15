@@ -58,7 +58,7 @@ class payments_global extends system_report {
         $user->add_join("LEFT JOIN {user} {$useralias} ON {$useralias}.id = {$mainalias}.userid");
         $this->add_base_condition_simple("{$useralias}.deleted", 0);
         $this->add_entity($user);
-
+/*
         $enrol = new enrolment();
         $enrolalias = $enrol->get_table_alias('enrol');
         $userenrolalias = $enrol->get_table_alias('user_enrolments');
@@ -71,7 +71,14 @@ class payments_global extends system_report {
         $course->add_join("LEFT JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid");
         $course->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid");
         $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
-//        $this->add_entity($course);
+        $this->add_entity($course);
+*/
+        $course = new course();
+        $coursealias = $course->get_table_alias('course');
+        $course->add_join("JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
+        $course->add_join("JOIN {course_modules} cm on (m.id=cm.module and {$mainalias}.itemid=cm.instance)");
+        $course->add_join("JOIN {course} {$coursealias} on {$coursealias}.id=cm.course");
+        $this->add_entity($course);
 
         $this->add_columns();
         $this->add_filters();
@@ -111,7 +118,7 @@ class payments_global extends system_report {
         $this->add_columns_from_entities([
             'payment:id',
             'payment:accountid',
-//            'course:coursefullnamewithlink',
+            'course:coursefullnamewithlink',
             'payment:gateway',
             'user:fullnamewithpicturelink',
             'payment:amount',
@@ -124,7 +131,7 @@ class payments_global extends system_report {
         if ($column = $this->get_column('payment:accountid')) {
             $column->set_title(new \lang_string('accountname', 'payment'));
         }
-        $this->set_initial_sort_column('payment:timecreated', SORT_DESC);
+        $this->set_initial_sort_column('payment:gateway', SORT_DESC);
     }
 
     /**
@@ -132,7 +139,7 @@ class payments_global extends system_report {
      */
     protected function add_filters(): void {
         $this->add_filters_from_entities([
-//            'course:fullname',
+  // 'course:fullname',
             'user:fullname',
             'payment:accountid',
             'payment:gateway',

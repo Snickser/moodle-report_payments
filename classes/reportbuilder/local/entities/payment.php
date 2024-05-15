@@ -98,12 +98,13 @@ class payment extends base {
         $tablealias = $this->get_table_alias('payments');
         $name = $this->get_entity_name();
 
+        // Payment id.
         $columns[] = (new column('id', new lang_string('paymentid', 'report_payments'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
-        
+
         // Accountid column.
         $columns[] = (new column('accountid', new lang_string('name'), $name))
             ->add_joins($this->get_joins())
