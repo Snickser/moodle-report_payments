@@ -71,7 +71,7 @@ class payments_global extends system_report {
         $course->add_join("LEFT JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid");
         $course->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid");
         $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
-        $this->add_entity($course);
+//        $this->add_entity($course);
 
         $this->add_columns();
         $this->add_filters();
@@ -110,7 +110,7 @@ class payments_global extends system_report {
     public function add_columns(): void {
         $this->add_columns_from_entities([
             'payment:accountid',
-            'course:coursefullnamewithlink',
+//            'course:coursefullnamewithlink',
             'payment:gateway',
             'user:fullnamewithpicturelink',
             'payment:amount',
@@ -131,7 +131,7 @@ class payments_global extends system_report {
      */
     protected function add_filters(): void {
         $this->add_filters_from_entities([
-            'course:fullname',
+//            'course:fullname',
             'user:fullname',
             'payment:accountid',
             'payment:gateway',
