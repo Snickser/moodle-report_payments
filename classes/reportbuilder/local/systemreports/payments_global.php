@@ -123,7 +123,7 @@ class payments_global extends system_report {
         if ($column = $this->get_column('payment:accountid')) {
             $column->set_title(new \lang_string('accountname', 'payment'));
         }
-        $this->set_initial_sort_column('payment:gateway', SORT_DESC);
+        $this->set_initial_sort_column('payment:timecreated', SORT_DESC);
     }
 
     /**
