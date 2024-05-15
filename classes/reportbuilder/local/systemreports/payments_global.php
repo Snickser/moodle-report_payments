@@ -139,7 +139,7 @@ class payments_global extends system_report {
      */
     protected function add_filters(): void {
         $this->add_filters_from_entities([
-  // 'course:fullname',
+            'course:fullname',
             'user:fullname',
             'payment:accountid',
             'payment:gateway',
