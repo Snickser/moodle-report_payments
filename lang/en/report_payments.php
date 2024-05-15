@@ -34,3 +34,4 @@ $string['payments:view'] = 'View payments course report';
 $string['plugin'] = 'Plugin';
 $string['pluginname'] = 'Payments';
 $string['privacy:metadata'] = 'The payments report plugin does not store any personal data.';
+$string['paymentid'] = 'Pid';
