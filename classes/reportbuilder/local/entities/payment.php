@@ -128,7 +128,7 @@ class payment extends base {
             ->set_is_sortable(true);
 
         // Amount column.
-        $columns[] = (new column('amount', new lang_string('cost'), $name))
+        $columns[] = (new column('amount', new lang_string('cost', 'report_payments'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.amount")
