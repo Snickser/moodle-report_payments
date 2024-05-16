@@ -117,8 +117,8 @@ class payments_global extends system_report {
     public function add_columns(): void {
         $this->add_columns_from_entities([
             'payment:id',
-            'payment:accountid',
-//            'course:coursefullnamewithlink',
+            'payment:accountid'
+            'course:coursefullnamewithlink',
             'payment:gateway',
             'user:fullnamewithpicturelink',
             'payment:amount',
@@ -139,7 +139,7 @@ class payments_global extends system_report {
      */
     protected function add_filters(): void {
         $this->add_filters_from_entities([
-//            'course:fullname',
+            'course:fullname',
             'user:fullname',
             'payment:accountid',
             'payment:gateway',
