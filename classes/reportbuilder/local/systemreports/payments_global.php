@@ -73,11 +73,18 @@ class payments_global extends system_report {
         $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
         $this->add_entity($course);
 */
+        $enrol = new enrolment();
+        $enrolalias = $enrol->get_table_alias('enrol');
+//        $enrol->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$useralias}.itemid");
+//        $this->add_entity($enrol);
+
         $course = new course();
         $coursealias = $course->get_table_alias('course');
-        $course->add_join("JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
-        $course->add_join("JOIN {course_modules} cm on (m.id=cm.module and {$mainalias}.itemid=cm.instance)");
-        $course->add_join("JOIN {course} {$coursealias} on {$coursealias}.id=cm.course");
+        $course->add_join("LEFT JOIN {enrol} {$enrolalias} on {$enrolalias}.id={$mainalias}.itemid");
+//        $course->add_join("LEFT JOIN {course_sections} cs on cs.id={$mainalias}.itemid");
+        $course->add_join("LEFT JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
+        $course->add_join("LEFT JOIN {course_modules} cm on (cm.instance={$mainalias}.itemid and cm.module=m.id)");
+        $course->add_join("LEFT JOIN {course} {$coursealias} on ({$coursealias}.id={$enrolalias}.courseid or {$coursealias}.id=cm.course)");
         $this->add_entity($course);
 
         $this->add_columns();

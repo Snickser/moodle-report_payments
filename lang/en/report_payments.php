@@ -36,3 +36,4 @@ $string['pluginname'] = 'Payments';
 $string['privacy:metadata'] = 'The payments report plugin does not store any personal data.';
 $string['paymentid'] = 'Pid';
 $string['cost'] = 'Amount';
+$string['name'] = 'Name';

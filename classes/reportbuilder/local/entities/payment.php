@@ -106,7 +106,7 @@ class payment extends base {
             ->set_is_sortable(true);
 
         // Accountid column.
-        $columns[] = (new column('accountid', new lang_string('name'), $name))
+        $columns[] = (new column('accountid', new lang_string('name', 'report_payments'), $name))
             ->add_joins($this->get_joins())
             ->add_join("LEFT JOIN {payment_accounts} pac ON {$tablealias}.accountid = pac.id")
             ->set_type(column::TYPE_TEXT)
