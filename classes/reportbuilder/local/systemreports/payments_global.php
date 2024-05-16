@@ -78,7 +78,7 @@ class payments_global extends system_report {
         $course->add_join("JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
         $course->add_join("JOIN {course_modules} cm on (m.id=cm.module and {$mainalias}.itemid=cm.instance)");
         $course->add_join("JOIN {course} {$coursealias} on {$coursealias}.id=cm.course");
-//        $this->add_entity($course);
+        $this->add_entity($course);
 
         $this->add_columns();
         $this->add_filters();
