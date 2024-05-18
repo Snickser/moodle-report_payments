@@ -129,7 +129,7 @@ class payments_global extends system_report {
             'payment:gateway',
             'user:fullnamewithpicturelink',
             'payment:amount',
-            'payment:currency',
+//            'payment:currency',
             'payment:timecreated',
         ]);
         if ($column = $this->get_column('course:coursefullnamewithlink')) {
