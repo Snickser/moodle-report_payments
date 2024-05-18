@@ -105,6 +105,30 @@ class payment extends base {
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
+        // Payment id.
+        $columns[] = (new column('success', new lang_string('status'), $name))
+            ->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->add_field("rb.success")
+            ->add_callback(function (?string $value): string {
+            switch ($value) {
+        	case 0:
+        	    return new lang_string('no');
+        	    break;
+        	case 1:
+        	    return '<b style="color: blue;">' . new lang_string('success') . '</b>';
+        	    break;
+        	case 2:
+        	    return '<b style="color: red;">' . new lang_string('password') . '</b>';
+        	    break;
+        	case 3:
+        	    return new lang_string('test');
+        	    break;
+        	default:
+        	    return new lang_string('none');
+        	}
+            });
+
         // Accountid column.
         $columns[] = (new column('accountid', new lang_string('name', 'report_payments'), $name))
             ->add_joins($this->get_joins())

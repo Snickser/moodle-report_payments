@@ -50,6 +50,7 @@ class payments_global extends system_report {
         $main = new payment();
         $mainalias = $main->get_table_alias('payments');
         $this->set_main_table('payments', $mainalias);
+        $main->add_join("left join mdl_paygw_robokassa rb on rb.paymentid={$mainalias}.id");
         $this->add_entity($main);
         $this->add_base_fields("{$mainalias}.id");
 
@@ -130,6 +131,7 @@ class payments_global extends system_report {
             'user:fullnamewithpicturelink',
             'payment:amount',
 //            'payment:currency',
+            'payment:success',
             'payment:timecreated',
         ]);
         if ($column = $this->get_column('course:coursefullnamewithlink')) {
