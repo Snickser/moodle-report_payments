@@ -95,6 +95,7 @@ class payment extends base {
      * @return column[]
      */
     protected function get_all_columns(): array {
+    global $DB;
         $tablealias = $this->get_table_alias('payments');
         $name = $this->get_entity_name();
 
@@ -105,13 +106,39 @@ class payment extends base {
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
+$str = "left join (";
+$un = 0;
+
+if($DB->get_record('payment_gateways', [ "gateway" => 'robokassa'] )){
+    $str .= " select paymentid,success from mdl_paygw_robokassa ";
+    $un=1;
+}
+
+$un == 1 ? $str.=" union " : false;
+
+if($DB->get_record('payment_gateways', [ "gateway" => 'yookassa'] )){
+    $str .= " select paymentid,success from mdl_paygw_yookassa ";
+    $un=1;
+}
+
+$un == 1 ? $str.=" union " : false;
+
+if($DB->get_record('payment_gateways', [ "gateway" => 'payanyway'] )){
+    $str .= " select paymentid,success from mdl_paygw_payanyway ";
+}
+
+$un == 1 ? $str.=" union " : false;
+
+if($DB->get_record('payment_gateways', [ "gateway" => 'cryptocloud'] )){
+    $str .= " select paymentid,success from mdl_paygw_cryptocloud ";
+}
+
+$str .= ") rb on rb.paymentid={$tablealias}.id";
+
         // Payment id.
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
-            ->add_join("left join (select paymentid,success from mdl_paygw_robokassa
-             union select paymentid,success from mdl_paygw_yookassa
-             union select paymentid,success from mdl_paygw_payanyway)
-             rb on rb.paymentid={$tablealias}.id")
+            ->add_join($str)
             ->set_type(column::TYPE_INTEGER)
             ->add_field("rb.success")
             ->add_attributes(['class' => 'text-center'])
