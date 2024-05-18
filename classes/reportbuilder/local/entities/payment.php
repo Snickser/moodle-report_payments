@@ -135,7 +135,7 @@ class payment extends base {
             ->set_is_sortable(true)
             ->add_attributes(['class' => 'text-right'])
             ->add_callback(function (?string $value): string {
-                return ($value === '') ? '0' : number_format(floatval($value), 2);
+                return ($value === '') ? '0' : number_format(floatval($value), 2, '.', '');
             });
 
         // Currency column.
