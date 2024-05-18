@@ -101,31 +101,37 @@ class payment extends base {
         // Payment id.
         $columns[] = (new column('id', new lang_string('paymentid', 'report_payments'), $name))
             ->add_joins($this->get_joins())
-            ->set_type(column::TYPE_TEXT)
+            ->set_type(column::TYPE_INTEGER)
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
         // Payment id.
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
-            ->set_type(column::TYPE_TEXT)
+            ->add_join("left join (select paymentid,success from mdl_paygw_robokassa
+             union select paymentid,success from mdl_paygw_yookassa
+             union select paymentid,success from mdl_paygw_payanyway)
+             rb on rb.paymentid={$tablealias}.id")
+            ->set_type(column::TYPE_INTEGER)
             ->add_field("rb.success")
-            ->add_callback(function (?string $value): string {
+            ->add_attributes(['class' => 'text-center'])
+            ->add_callback(function (?int $value): string {
+            !isset($value) ? $value=-1 : false;
             switch ($value) {
         	case 0:
-        	    return new lang_string('no');
+        	    return '<div style="color: red;">' . new lang_string('unfinished') . '</div>';
         	    break;
         	case 1:
-        	    return '<b style="color: blue;">' . new lang_string('success') . '</b>';
+        	    return '<b style="color: green;">' . new lang_string('success') . '</b>';
         	    break;
         	case 2:
-        	    return '<b style="color: red;">' . new lang_string('password') . '</b>';
+        	    return '<b style="color: blue;">' . new lang_string('password') . '</b>';
         	    break;
         	case 3:
-        	    return new lang_string('test');
+        	    return new lang_string('ok');
         	    break;
         	default:
-        	    return new lang_string('none');
+        	    return new lang_string('no');
         	}
             });
 
@@ -156,7 +162,7 @@ class payment extends base {
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.amount")
-            ->set_is_sortable(true)
+//            ->set_is_sortable(true)
             ->add_attributes(['class' => 'text-right'])
             ->add_callback(function (?string $value): string {
                   return \core_payment\helper::get_cost_as_string($value, 'RUB');
