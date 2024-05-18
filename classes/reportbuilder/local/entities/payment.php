@@ -106,31 +106,32 @@ class payment extends base {
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
+$dbman = $DB->get_manager();
 $str = "left join (";
 $un = 0;
 
-if($DB->get_record('payment_gateways', [ "gateway" => 'robokassa'] )){
+if($dbman->table_exists('paygw_robokassa')){
+    $un == 1 ? $str.=" union " : false;
     $str .= " select paymentid,success from mdl_paygw_robokassa ";
     $un=1;
 }
 
-$un == 1 ? $str.=" union " : false;
-
-if($DB->get_record('payment_gateways', [ "gateway" => 'yookassa'] )){
+if($dbman->table_exists('paygw_yookassa')){
+    $un == 1 ? $str.=" union " : false;
     $str .= " select paymentid,success from mdl_paygw_yookassa ";
     $un=1;
 }
 
-$un == 1 ? $str.=" union " : false;
-
-if($DB->get_record('payment_gateways', [ "gateway" => 'payanyway'] )){
+if($dbman->table_exists('paygw_payanyway')){
+    $un == 1 ? $str.=" union " : false;
     $str .= " select paymentid,success from mdl_paygw_payanyway ";
+    $un=1;
 }
 
-$un == 1 ? $str.=" union " : false;
-
-if($DB->get_record('payment_gateways', [ "gateway" => 'cryptocloud'] )){
+if($dbman->table_exists('paygw_cryptocloud')){
+    $un == 1 ? $str.=" union " : false;
     $str .= " select paymentid,success from mdl_paygw_cryptocloud ";
+    $un=1;
 }
 
 $str .= ") rb on rb.paymentid={$tablealias}.id";
