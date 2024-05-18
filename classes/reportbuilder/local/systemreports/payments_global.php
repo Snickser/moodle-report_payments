@@ -98,7 +98,7 @@ class payments_global extends system_report {
             $this->add_base_condition_sql("$coursealias.id IN ($str)", []);
         }
 
-        $this->set_downloadable(true, get_string('payments'));
+//        $this->set_downloadable(true, get_string('payments'));
     }
 
     /**
