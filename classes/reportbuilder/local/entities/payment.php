@@ -95,7 +95,6 @@ class payment extends base {
      * @return column[]
      */
     protected function get_all_columns(): array {
-    global $DB;
         $tablealias = $this->get_table_alias('payments');
         $name = $this->get_entity_name();
 
@@ -106,7 +105,10 @@ class payment extends base {
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
+
+global $DB;
 $dbman = $DB->get_manager();
+
 $str = "left join (";
 $un = 0;
 
@@ -136,6 +138,7 @@ if($dbman->table_exists('paygw_cryptocloud')){
 
 $str .= ") rb on rb.paymentid={$tablealias}.id";
 
+
         // Payment id.
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
@@ -143,6 +146,7 @@ $str .= ") rb on rb.paymentid={$tablealias}.id";
             ->set_type(column::TYPE_INTEGER)
             ->add_field("rb.success")
             ->add_attributes(['class' => 'text-center'])
+            ->set_is_sortable(true)
             ->add_callback(function (?int $value): string {
             !isset($value) ? $value=-1 : false;
             switch ($value) {
@@ -188,12 +192,12 @@ $str .= ") rb on rb.paymentid={$tablealias}.id";
         // Amount column.
         $columns[] = (new column('amount', new lang_string('cost', 'report_payments'), $name))
             ->add_joins($this->get_joins())
-            ->set_type(column::TYPE_TEXT)
-            ->add_field("{$tablealias}.amount")
+            ->set_type(column::TYPE_INTEGER)
+            ->add_fields("{$tablealias}.amount, {$tablealias}.currency")
 //            ->set_is_sortable(true)
             ->add_attributes(['class' => 'text-right'])
-            ->add_callback(function (?string $value): string {
-                  return \core_payment\helper::get_cost_as_string($value, 'RUB');
+            ->add_callback(function (?int $value, \stdClass $row): string {
+                  return \core_payment\helper::get_cost_as_string($row->amount, $row->currency);
 //                return ($value === '') ? '0' : number_format(floatval($value), 2, '.', '');
             });
 
