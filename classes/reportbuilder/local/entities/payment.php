@@ -109,31 +109,22 @@ class payment extends base {
 global $DB;
 $dbman = $DB->get_manager();
 
-$str = "left join (";
-$un = 0;
+$str = "left join (select 0 paymentid, 0 success";
 
 if($dbman->table_exists('paygw_robokassa')){
-    $un == 1 ? $str.=" union " : false;
-    $str .= " select paymentid,success from mdl_paygw_robokassa ";
-    $un=1;
+    $str .= " union select paymentid,success from mdl_paygw_robokassa ";
 }
 
 if($dbman->table_exists('paygw_yookassa')){
-    $un == 1 ? $str.=" union " : false;
-    $str .= " select paymentid,success from mdl_paygw_yookassa ";
-    $un=1;
+    $str .= " union select paymentid,success from mdl_paygw_yookassa ";
 }
 
 if($dbman->table_exists('paygw_payanyway')){
-    $un == 1 ? $str.=" union " : false;
-    $str .= " select paymentid,success from mdl_paygw_payanyway ";
-    $un=1;
+    $str .= " union select paymentid,success from mdl_paygw_payanyway ";
 }
 
 if($dbman->table_exists('paygw_cryptocloud')){
-    $un == 1 ? $str.=" union " : false;
-    $str .= " select paymentid,success from mdl_paygw_cryptocloud ";
-    $un=1;
+    $str .= " union select paymentid,success from mdl_paygw_cryptocloud ";
 }
 
 $str .= ") rb on rb.paymentid={$tablealias}.id";
@@ -200,14 +191,14 @@ $str .= ") rb on rb.paymentid={$tablealias}.id";
                   return \core_payment\helper::get_cost_as_string($row->amount, $row->currency);
 //                return ($value === '') ? '0' : number_format(floatval($value), 2, '.', '');
             });
-
+/*
         // Currency column.
         $columns[] = (new column('currency', new lang_string('currency'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.currency")
             ->set_is_sortable(true);
-
+*/
         // Date column.
         $columns[] = (new column('timecreated', new lang_string('date'), $name))
             ->add_joins($this->get_joins())
@@ -216,7 +207,6 @@ $str .= ") rb on rb.paymentid={$tablealias}.id";
             ->set_is_sortable(true)
             ->add_attributes(['class' => 'text-right'])
             ->add_callback([format::class, 'userdate'], get_string('strftimedatetimeshortaccurate', 'core_langconfig'));
-
         return $columns;
     }
 
