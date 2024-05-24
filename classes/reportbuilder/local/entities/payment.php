@@ -205,7 +205,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             ->set_type(column::TYPE_TIMESTAMP)
             ->add_field("{$tablealias}.timecreated")
             ->set_is_sortable(true)
-            ->add_attributes(['class' => 'text-right'])
+//            ->add_attributes(['class' => 'text-right'])
             ->add_callback([format::class, 'userdate'], get_string('strftimedatetimeshortaccurate', 'core_langconfig'));
         return $columns;
     }
@@ -243,7 +243,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             ->add_joins($this->get_joins());
 
         // Amount filter.
-        $filters[] = (new filter(text::class, 'amount', new lang_string('cost'), $name, "{$tablealias}.amount"))
+        $filters[] = (new filter(number::class, 'amount', new lang_string('cost'), $name, "{$tablealias}.amount"))
             ->add_joins($this->get_joins());
 
         // Date filter.

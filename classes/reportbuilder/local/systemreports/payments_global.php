@@ -50,7 +50,6 @@ class payments_global extends system_report {
         $main = new payment();
         $mainalias = $main->get_table_alias('payments');
         $this->set_main_table('payments', $mainalias);
-//        $main->add_join("left join mdl_paygw_robokassa rb on rb.paymentid={$mainalias}.id");
         $this->add_entity($main);
         $this->add_base_fields("{$mainalias}.id");
 
@@ -76,13 +75,9 @@ class payments_global extends system_report {
 */
         $enrol = new enrolment();
         $enrolalias = $enrol->get_table_alias('enrol');
-//        $enrol->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$useralias}.itemid");
-//        $this->add_entity($enrol);
 
         $course = new course();
         $coursealias = $course->get_table_alias('course');
-//        $course->add_join("LEFT JOIN {enrol} {$enrolalias} on {$enrolalias}.id={$mainalias}.itemid");
-//        $course->add_join("LEFT JOIN {course_sections} cs on cs.id={$mainalias}.itemid");
         $course->add_join("LEFT JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
         $course->add_join("LEFT JOIN {course_modules} cm on (cm.instance={$mainalias}.itemid and cm.module=m.id)");
         $course->add_join("LEFT JOIN {course} {$coursealias} on ({$coursealias}.id=cm.course)");
@@ -140,6 +135,10 @@ class payments_global extends system_report {
         if ($column = $this->get_column('payment:accountid')) {
             $column->set_title(new \lang_string('accountname', 'payment'));
         }
+        $this->add_attributes(['class' => 'text-center']);
+        $column = $this->get_column('user:fullnamewithpicturelink');
+        $column->set_title(new \lang_string('user'));
+        $column->add_attributes(['class' => 'text-left']);
         $this->set_initial_sort_column('payment:timecreated', SORT_DESC);
     }
 
@@ -153,7 +152,7 @@ class payments_global extends system_report {
             'payment:accountid',
             'payment:gateway',
             'payment:amount',
-//            'payment:currency',
+            'payment:currency',
             'payment:timecreated',
         ]);
     }
