@@ -109,7 +109,7 @@ class payment extends base {
 global $DB;
 $dbman = $DB->get_manager();
 
-$str = "left join (select 0 paymentid, 0 success";
+$str = "LEFT JOIN (select 0 paymentid, 0 success";
 
 if($dbman->table_exists('paygw_robokassa')){
     $str .= " union select paymentid,success from mdl_paygw_robokassa ";
@@ -127,7 +127,7 @@ if($dbman->table_exists('paygw_cryptocloud')){
     $str .= " union select paymentid,success from mdl_paygw_cryptocloud ";
 }
 
-$str .= ") rb on rb.paymentid={$tablealias}.id";
+$str .= ") rb ON rb.paymentid={$tablealias}.id";
 
 
         // Payment id.
