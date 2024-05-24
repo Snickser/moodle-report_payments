@@ -73,14 +73,10 @@ class payments_global extends system_report {
         $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
         $this->add_entity($course);
 */
-        $enrol = new enrolment();
-        $enrolalias = $enrol->get_table_alias('enrol');
-
         $course = new course();
         $coursealias = $course->get_table_alias('course');
-        $course->add_join("LEFT JOIN {modules} m on {$mainalias}.component=CONCAT('mod_',m.name)");
-        $course->add_join("LEFT JOIN {course_modules} cm on (cm.instance={$mainalias}.itemid and cm.module=m.id)");
-        $course->add_join("LEFT JOIN {course} {$coursealias} on ({$coursealias}.id=cm.course)");
+        $course->add_join("LEFT JOIN {gwpayments} gwp on gwp.id={$mainalias}.itemid");
+        $course->add_join("LEFT JOIN {course} {$coursealias} on {$coursealias}.id=gwp.course");
         $this->add_entity($course);
 
         $this->add_columns();

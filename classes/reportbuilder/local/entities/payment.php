@@ -105,32 +105,25 @@ class payment extends base {
             ->add_field("{$tablealias}.id")
             ->set_is_sortable(true);
 
-
 global $DB;
 $dbman = $DB->get_manager();
 
-$str = "LEFT JOIN (select 0 paymentid, 0 success";
-
+$str = "LEFT JOIN (select 0 paymentid, 0 courseid, 0 success";
 if($dbman->table_exists('paygw_robokassa')){
-    $str .= " union select paymentid,success from mdl_paygw_robokassa ";
+    $str .= " union select paymentid,courseid,success from mdl_paygw_robokassa ";
 }
-
 if($dbman->table_exists('paygw_yookassa')){
-    $str .= " union select paymentid,success from mdl_paygw_yookassa ";
+    $str .= " union select paymentid,courseid,success from mdl_paygw_yookassa ";
 }
-
 if($dbman->table_exists('paygw_payanyway')){
-    $str .= " union select paymentid,success from mdl_paygw_payanyway ";
+    $str .= " union select paymentid,courseid,success from mdl_paygw_payanyway ";
 }
-
 if($dbman->table_exists('paygw_cryptocloud')){
-    $str .= " union select paymentid,success from mdl_paygw_cryptocloud ";
+    $str .= " union select paymentid,courseid,success from mdl_paygw_cryptocloud ";
 }
-
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
-
-        // Payment id.
+        // Payment success.
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
             ->add_join($str)
