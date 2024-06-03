@@ -101,17 +101,22 @@ class payments_course extends system_report {
     public function add_columns(): void {
         $this->add_columns_from_entities(
             [
+                'payment:id',
                 'payment:accountid',
                 'payment:gateway',
                 'user:fullnamewithpicturelink',
                 'payment:amount',
-                'payment:currency',
+//                'payment:currency',
                 'payment:timecreated',
             ]
         );
         if ($column = $this->get_column('payment:accountid')) {
             $column->set_title(new \lang_string('accountname', 'payment'));
         }
+        $this->add_attributes(['class' => 'text-center']);
+        $column = $this->get_column('user:fullnamewithpicturelink');
+        $column->set_title(new \lang_string('user'));
+        $column->add_attributes(['class' => 'text-left']);
         $this->set_initial_sort_column('payment:timecreated', SORT_DESC);
     }
 

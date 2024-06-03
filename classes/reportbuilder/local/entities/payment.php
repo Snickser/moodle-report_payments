@@ -184,19 +184,22 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
                   return \core_payment\helper::get_cost_as_string($row->amount, $row->currency);
 //                return ($value === '') ? '0' : number_format(floatval($value), 2, '.', '');
             });
-/*
+
         // Currency column.
         $columns[] = (new column('currency', new lang_string('currency'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$tablealias}.currency")
             ->set_is_sortable(true);
-*/
+//            ->add_callback(function (?string $value): string {
+//                  return new lang_string($value, 'currencies');
+//            });
+
         // Date column.
         $columns[] = (new column('timecreated', new lang_string('date'), $name))
             ->add_joins($this->get_joins())
             ->set_type(column::TYPE_TIMESTAMP)
-            ->add_field("{$tablealias}.timecreated")
+            ->add_field("{$tablealias}.timemodified")
             ->set_is_sortable(true)
 //            ->add_attributes(['class' => 'text-right'])
             ->add_callback([format::class, 'userdate'], get_string('strftimedatetimeshortaccurate', 'core_langconfig'));
