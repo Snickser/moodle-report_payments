@@ -60,9 +60,11 @@ class payments_user extends system_report {
 
         $course = new course();
         $coursealias = $course->get_table_alias('course');
-        $course->add_join("LEFT JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid");
-        $course->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid");
-        $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
+        $course->add_join("LEFT JOIN {gwpayments} gwp on gwp.id={$mainalias}.itemid");
+        $course->add_join("LEFT JOIN {course} {$coursealias} on {$coursealias}.id=gwp.course");
+//        $course->add_join("LEFT JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid");
+//        $course->add_join("LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid");
+//        $course->add_join("LEFT JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
         $this->add_entity($course);
 
         $this->add_columns();
