@@ -107,6 +107,7 @@ class payments_course extends system_report {
                 'user:fullnamewithpicturelink',
                 'payment:amount',
 //                'payment:currency',
+                'payment:success',
                 'payment:timecreated',
             ]
         );
