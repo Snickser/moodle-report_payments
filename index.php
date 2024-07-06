@@ -62,7 +62,7 @@ require_login();
 $PAGE->set_url(new \moodle_url('/report/payments/index.php', $params));
 $PAGE->set_pagelayout('report');
 $PAGE->set_context($context);
-$strheading = get_string('payments');
+$strheading = get_string('payments','report_payments');
 
 $PAGE->set_title($strheading);
 switch ($context->contextlevel) {
@@ -79,12 +79,14 @@ switch ($context->contextlevel) {
 }
 \report_payments\event\report_viewed::create(['context' => $context])->trigger();
 $report = system_report_factory::create($classname, $context);
-
 if (!empty($filter)) {
     $report->set_filter_values(['payment:name_values' => $filter]);
 }
 echo $OUTPUT->header();
-$pluginname = get_string('pluginname', 'report_payments');
-report_helper::print_report_selector($pluginname);
+//$pluginname = get_string('pluginname', 'report_payments');
+//report_helper::print_report_selector($pluginname);
+
+echo get_string('cancel_helper','report_payments');
+
 echo $report->output();
 echo $OUTPUT->footer();

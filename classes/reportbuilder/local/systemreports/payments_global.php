@@ -123,6 +123,7 @@ class payments_global extends system_report {
             'payment:amount',
 //            'payment:currency',
             'payment:success',
+            'payment:recurrent',
             'payment:timecreated',
         ]);
         if ($column = $this->get_column('course:coursefullnamewithlink')) {
@@ -149,6 +150,7 @@ class payments_global extends system_report {
             'payment:gateway',
             'payment:amount',
             'payment:currency',
+            'payment:recurrent',
             'payment:timecreated',
         ]);
     }

@@ -38,3 +38,5 @@ $string['paymentid'] = 'Pid';
 $string['cost'] = 'Amount';
 $string['name'] = 'Name';
 $string['payments'] = 'Payments and recurring subscriptions';
+$string['recurrent'] = 'Recurrent';
+$string['cancel_helper'] = '';
