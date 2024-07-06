@@ -37,3 +37,4 @@ $string['privacy:metadata'] = 'The payments report plugin does not store any per
 $string['paymentid'] = 'Pid';
 $string['cost'] = 'Amount';
 $string['name'] = 'Name';
+$string['payments'] = 'Payments and recurring subscriptions';
