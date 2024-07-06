@@ -108,20 +108,38 @@ class payment extends base {
 global $DB;
 $dbman = $DB->get_manager();
 
-$str = "LEFT JOIN (select 0 paymentid, 0 courseid, 0 success";
+$str = "LEFT JOIN (select 0 paymentid, 0 courseid, 0 success, 0 recurrent";
 if($dbman->table_exists('paygw_robokassa')){
-    $str .= " union select paymentid,courseid,success from mdl_paygw_robokassa ";
+    $str .= " union select paymentid,courseid,success,recurrent from mdl_paygw_robokassa ";
 }
 if($dbman->table_exists('paygw_yookassa')){
-    $str .= " union select paymentid,courseid,success from mdl_paygw_yookassa ";
+    $str .= " union select paymentid,courseid,success,recurrent from mdl_paygw_yookassa ";
 }
 if($dbman->table_exists('paygw_payanyway')){
-    $str .= " union select paymentid,courseid,success from mdl_paygw_payanyway ";
+    $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_payanyway ";
 }
 if($dbman->table_exists('paygw_cryptocloud')){
-    $str .= " union select paymentid,courseid,success from mdl_paygw_cryptocloud ";
+    $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_cryptocloud ";
 }
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
+
+
+        // Payment recurrent.
+        $columns[] = (new column('recurrent', new lang_string('recurrent','report_payments'), $name))
+            ->add_joins($this->get_joins())
+            ->add_join($str)
+            ->set_type(column::TYPE_INTEGER)
+            ->add_fields("rb.recurrent, {$tablealias}.id")
+            ->add_attributes(['class' => 'text-center'])
+            ->set_is_sortable(true)
+            ->add_callback(function (?int $value, \stdClass $row): string {
+             if($value>0){ 
+                return '<b style="color: red;">' . new lang_string('yes'). '</b>' .
+                '<br>'.'<a href="?cancel=' . $row->id .'&sesskey='. sesskey() . '">' . new lang_string('cancel') . '</a>';
+             }
+             else return false;
+            });
+
 
         // Payment success.
         $columns[] = (new column('success', new lang_string('status'), $name))
@@ -240,6 +258,10 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
         // Amount filter.
         $filters[] = (new filter(number::class, 'amount', new lang_string('cost'), $name, "{$tablealias}.amount"))
+            ->add_joins($this->get_joins());
+
+        // Recurrent filter.
+        $filters[] = (new filter(number::class, 'recurrent', new lang_string('recurrent','report_payments'), $name, "{$tablealias}.recurrent"))
             ->add_joins($this->get_joins());
 
         // Date filter.

@@ -31,12 +31,13 @@ use core_reportbuilder\external\system_report_exporter;
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once("{$CFG->libdir}/adminlib.php");
 
-
 $courseid = optional_param('courseid', 1, PARAM_INT);
 $userid = optional_param('userid', 0, PARAM_INT);
 $categoryid = optional_param('categoryid', 0, PARAM_INT);
 $download = optional_param('download', false, PARAM_BOOL);
 $filter = optional_param('filter', null, PARAM_TEXT);
+$recurrent = optional_param('cancel', null, PARAM_INT);
+
 
 if ($courseid == 1) {
     if ($categoryid != 0) {
@@ -59,10 +60,34 @@ if ($courseid == 1) {
 }
 require_login();
 
+
+// Delete recurrent payment from database.
+if ($recurrent > 0) {
+    require_sesskey();
+    // Get payment.
+    if ($payment = $DB->get_record('payments', ['id' => $recurrent])) {
+        // Check userid.
+        if ($payment->userid == $USER->id || is_siteadmin()) {
+            // Get id.
+            $gateway = 'paygw_' . $payment->gateway;
+            if ($paytx = $DB->get_record($gateway, ['paymentid' => $recurrent])) {
+                // Do real update.
+                $paytx->recurrent = 0;
+                $DB->update_record($gateway, $paytx);
+            }
+        }
+    }
+    if (!is_siteadmin()) {
+        $params = ['userid' => $USER->id];
+    }
+    redirect(new \moodle_url('/report/payments/index.php', $params));
+}
+
+
 $PAGE->set_url(new \moodle_url('/report/payments/index.php', $params));
 $PAGE->set_pagelayout('report');
 $PAGE->set_context($context);
-$strheading = get_string('payments');
+$strheading = get_string('payments', 'report_payments');
 
 $PAGE->set_title($strheading);
 switch ($context->contextlevel) {
@@ -79,12 +104,14 @@ switch ($context->contextlevel) {
 }
 \report_payments\event\report_viewed::create(['context' => $context])->trigger();
 $report = system_report_factory::create($classname, $context);
-
 if (!empty($filter)) {
     $report->set_filter_values(['payment:name_values' => $filter]);
 }
 echo $OUTPUT->header();
-$pluginname = get_string('pluginname', 'report_payments');
-report_helper::print_report_selector($pluginname);
+// $pluginname = get_string('pluginname', 'report_payments');
+// report_helper::print_report_selector($pluginname);
+
+echo get_string('cancel_helper', 'report_payments');
+
 echo $report->output();
 echo $OUTPUT->footer();

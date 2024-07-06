@@ -23,20 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['eventreportviewed'] = 'Payments report viewed';
-$string['page-report-payments-course'] = 'Payments course report';
-$string['page-report-payments-index'] = 'Payments global report';
-$string['page-report-payments-user'] = 'Payments user report';
-$string['page-report-payments-x'] = 'Any payments report';
-$string['payments:overview'] = 'View payments global report';
-$string['payments:userview'] = 'View payments user report';
-$string['payments:view'] = 'View payments course report';
-$string['plugin'] = 'Plugin';
-$string['pluginname'] = 'Payments';
-$string['privacy:metadata'] = 'The payments report plugin does not store any personal data.';
-$string['paymentid'] = 'Pid';
-$string['cost'] = 'Amount';
-$string['name'] = 'Name';
-$string['payments'] = 'Payments and recurring subscriptions';
-$string['recurrent'] = 'Recurrent';
-$string['cancel_helper'] = '';
+$string['payments'] = 'Оплата и регулярные подписки';
+$string['recurrent'] = 'Подписка';
+$string['cancel_helper'] = 'Для прекращения подписки (регулярного платежа) найдите его в списке и нажмите "Отмена".';
