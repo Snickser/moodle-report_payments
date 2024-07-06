@@ -100,6 +100,7 @@ class payments_user extends system_report {
                 'payment:amount',
                 'payment:success',
 //                'payment:currency',
+                'payment:recurrent',
                 'payment:timecreated',
                 'course:coursefullnamewithlink',
             ]

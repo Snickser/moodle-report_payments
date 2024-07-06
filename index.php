@@ -77,8 +77,12 @@ if ($recurrent > 0) {
             }
         }
     }
-    redirect(new \moodle_url('/report/payments/index.php'));
+    if (!is_siteadmin()) {
+        $params = ['userid' => $USER->id];
+    }
+    redirect(new \moodle_url('/report/payments/index.php', $params));
 }
+
 
 $PAGE->set_url(new \moodle_url('/report/payments/index.php', $params));
 $PAGE->set_pagelayout('report');

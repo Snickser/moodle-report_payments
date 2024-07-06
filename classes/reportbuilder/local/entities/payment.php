@@ -124,7 +124,7 @@ if($dbman->table_exists('paygw_cryptocloud')){
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
 
-        // Payment success.
+        // Payment recurrent.
         $columns[] = (new column('recurrent', new lang_string('recurrent','report_payments'), $name))
             ->add_joins($this->get_joins())
             ->add_join($str)
@@ -135,7 +135,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             ->add_callback(function (?int $value, \stdClass $row): string {
              if($value>0){ 
                 return '<b style="color: red;">' . new lang_string('yes'). '</b>' .
-                '<br>'.'<a href=?cancel=' . $row->id .'&sesskey='. sesskey() . '>' . new lang_string('cancel') . '</a>';
+                '<br>'.'<a href="?cancel=' . $row->id .'&sesskey='. sesskey() . '">' . new lang_string('cancel') . '</a>';
              }
              else return false;
             });
