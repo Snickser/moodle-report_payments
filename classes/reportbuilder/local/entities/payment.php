@@ -135,7 +135,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             ->add_callback(function (?int $value, \stdClass $row): string {
              if($value>0){ 
                 return '<b style="color: red;">' . new lang_string('yes'). '</b>' .
-                '<br>'.'<a href=?cancel=' . $row->id . '>' . new lang_string('cancel') . '</a>';
+                '<br>'.'<a href=?cancel=' . $row->id .'&sesskey='. sesskey() . '>' . new lang_string('cancel') . '</a>';
              }
              else return false;
             });
