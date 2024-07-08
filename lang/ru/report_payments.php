@@ -15,32 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for report payments.
+ * The paymenst report
  *
  * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
+ * @copyright  2023 Medical Access Uganda Limited
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace report_payments\privacy;
-
-/**
- * Privacy Subsystem implementation for report payments.
- *
- * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
- * @author     Renaat Debleu <info@eWallah.net>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class provider implements \core_privacy\local\metadata\null_provider {
-    /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
-     *
-     * @return  string
-     */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
-    }
-}
+$string['payments'] = 'Оплата и регулярные подписки';
+$string['recurrent'] = 'Подписка';
+$string['cancel_helper'] = 'Для прекращения подписки (регулярного платежа) найдите его в списке и нажмите "Отмена".';

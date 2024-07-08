@@ -59,6 +59,8 @@ class payments_global extends system_report {
         $this->add_base_condition_simple("{$useralias}.deleted", 0);
         $this->add_entity($user);
 
+/*
+
         $enrol = new enrolment();
         $enrolalias = $enrol->get_table_alias('enrol');
         $userenrolalias = $enrol->get_table_alias('user_enrolments');
@@ -74,6 +76,34 @@ class payments_global extends system_report {
         $course->add_joins($enrol->get_joins())
             ->add_join("INNER JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
         $this->add_entity($course);
+
+        $enrol = new enrolment();
+        $enrolalias = $enrol->get_table_alias('enrol');
+        $userenrolalias = $enrol->get_table_alias('user_enrolments');
+        $enrol->add_joins($user->get_joins())
+            ->add_join("INNER JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid")
+            ->add_join("INNER JOIN {enrol} {$enrolalias} ON
+                              {$enrolalias}.id = {$userenrolalias}.enrolid AND
+                              {$enrolalias}.enrol = {$mainalias}.paymentarea");
+        $this->add_entity($enrol);
+
+        $course = new course();
+        $coursealias = $course->get_table_alias('course');
+        $course->add_joins($enrol->get_joins())
+            ->add_join("INNER JOIN {course} {$coursealias} ON {$coursealias}.id = {$enrolalias}.courseid");
+        $this->add_entity($course);
+
+*/
+
+        $course = new course();
+        $coursealias = $course->get_table_alias('course');
+        $course->add_join("LEFT JOIN {enrol_fee} fee on fee.paymentid={$mainalias}.id");
+        $course->add_join("LEFT JOIN {gwpayments} gwp on gwp.id={$mainalias}.itemid");
+        $course->add_join("LEFT JOIN {course} {$coursealias} on " .
+           "({$coursealias}.id=fee.courseid or {$coursealias}.id=gwp.course)");
+        $this->add_entity($course);
+
+
 
         $this->add_columns();
         $this->add_filters();
@@ -111,12 +141,16 @@ class payments_global extends system_report {
      */
     public function add_columns(): void {
         $this->add_columns_from_entities([
+            'payment:id',
             'payment:accountid',
+//            'payment:course',
             'course:coursefullnamewithlink',
             'payment:gateway',
             'user:fullnamewithpicturelink',
             'payment:amount',
-            'payment:currency',
+//            'payment:currency',
+            'payment:success',
+            'payment:recurrent',
             'payment:timecreated',
         ]);
         if ($column = $this->get_column('course:coursefullnamewithlink')) {
@@ -125,7 +159,11 @@ class payments_global extends system_report {
         if ($column = $this->get_column('payment:accountid')) {
             $column->set_title(new \lang_string('accountname', 'payment'));
         }
-        $this->set_initial_sort_column('payment:gateway', SORT_DESC);
+        $this->add_attributes(['class' => 'text-center']);
+        $column = $this->get_column('user:fullnamewithpicturelink');
+        $column->set_title(new \lang_string('user'));
+        $column->add_attributes(['class' => 'text-left']);
+        $this->set_initial_sort_column('payment:timecreated', SORT_DESC);
     }
 
     /**
@@ -133,12 +171,13 @@ class payments_global extends system_report {
      */
     protected function add_filters(): void {
         $this->add_filters_from_entities([
-            'course:fullname',
+//            'course:fullname',
             'user:fullname',
             'payment:accountid',
             'payment:gateway',
             'payment:amount',
             'payment:currency',
+            'payment:recurrent',
             'payment:timecreated',
         ]);
     }

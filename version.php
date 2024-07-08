@@ -25,9 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->requires = 2023042400;
+$plugin->version = 3024070800;
 $plugin->component = 'report_payments';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->supported = [402, 404];
-$plugin->release = 'v4.4.3';
-$plugin->version = 2024052600;
+$plugin->requires = 2023042400;
+$plugin->release = 'v5';
+
+$plugin->dependencies = [
+    'mod_gwpayments' => 3024043000,
+    'enrol_fee' => 3024070800,
+];

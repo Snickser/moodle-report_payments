@@ -71,7 +71,7 @@ function report_payments_myprofile_navigation(\core_user\output\myprofile\tree $
     $context = \context_user::instance($user->id);
     if (has_capability('report/payments:userview', $context)) {
         $url = new moodle_url('/report/payments/index.php', ['userid' => $user->id]);
-        $txt = get_string('payments');
+        $txt = get_string('payments','report_payments');
         $node = new \core_user\output\myprofile\node('reports', 'payments', $txt, null, $url);
         $tree->add_node($node);
     }
