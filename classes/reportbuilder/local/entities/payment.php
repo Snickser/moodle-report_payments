@@ -123,6 +123,12 @@ if($dbman->table_exists('paygw_cryptocloud')){
 }
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
+        // Component column.
+        $columns[] = (new column('course', new lang_string('course'), $name))
+            ->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->add_field("rb.courseid")
+            ->set_is_sortable(true);
 
         // Payment recurrent.
         $columns[] = (new column('recurrent', new lang_string('recurrent','report_payments'), $name))

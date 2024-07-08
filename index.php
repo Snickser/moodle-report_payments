@@ -72,7 +72,8 @@ if ($recurrent > 0) {
             $gateway = 'paygw_' . $payment->gateway;
             if ($paytx = $DB->get_record($gateway, ['paymentid' => $recurrent])) {
                 // Do real update.
-                $paytx->recurrent = 0;
+		    $paytx->recurrent = 0;
+		    $paytx->invoiceid = 'deleted';
                 $DB->update_record($gateway, $paytx);
             }
         }
