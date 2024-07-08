@@ -18,12 +18,16 @@
  * Tests for payments report events.
  *
  * @package   report_payments
- * @copyright 2023 Medical Access Uganda Limited
+ * @copyright Medical Access Uganda Limited (e-learning.medical-access.org)
  * @author    Renaat Debleu <info@eWallah.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace report_payments\reportbuilder;
 
+use context_course;
+use context_coursecat;
+use context_system;
+use context_user;
 use core_reportbuilder\system_report_factory;
 use enrol_fee\payment\service_provider;
 use report_payments\reportbuilder\datasource\payments;
@@ -34,7 +38,7 @@ use report_payments\reportbuilder\local\systemreports\{payments_course, payments
  * Class report payments global report tests
  *
  * @package   report_payments
- * @copyright 2020 Medical Access Uganda Limited
+ * @copyright Medical Access Uganda Limited (e-learning.medical-access.org)
  * @author    Renaat Debleu <info@eWallah.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -50,6 +54,7 @@ final class reports_test extends \advanced_testcase {
      */
     public function setUp(): void {
         global $DB;
+        parent::setUp();
         $this->setAdminUser();
         $this->resetAfterTest();
         $gen = $this->getDataGenerator();
@@ -73,10 +78,17 @@ final class reports_test extends \advanced_testcase {
             'roleid' => $roleid,
         ];
         $id = $feeplugin->add_instance($course, $data);
-        $paymentid = $pgen->create_payment(['accountid' => $accountid, 'amount' => 10, 'userid' => $userid]);
+        $paymentid = $pgen->create_payment(['gateway' => 'paypal', 'accountid' => $accountid, 'amount' => 10, 'userid' => $userid]);
         service_provider::deliver_order('fee', $id, $paymentid, $userid);
         $this->course = $course;
         $this->userid = $userid;
+        $context = context_course::instance($course->id);
+        $this->assertTrue(is_enrolled($context, $userid));
+        $this->assertTrue(user_has_role_assignment($userid, $roleid, $context->id));
+        $records = $DB->get_records('payments', []);
+        foreach ($records as $record) {
+            $DB->set_field('payments', 'paymentarea', 'fee', ['id' => $record->id]);
+        }
     }
 
     /**
@@ -86,12 +98,16 @@ final class reports_test extends \advanced_testcase {
      * @covers \report_payments\reportbuilder\local\entities\payment
      */
     public function test_global(): void {
-        $context = \context_system::instance();
+        global $PAGE;
+        $context = context_system::instance();
         $report = system_report_factory::create(payments_global::class, $context);
         $this->assertEquals($report->get_name(), 'Payments');
+        $PAGE->set_url(new \moodle_url('/report/payments/index.php', ['courseid' => 1]));
+        $this->output_assert($report->output());
         $context = \context_coursecat::instance($this->course->category);
         $report = system_report_factory::create(payments_global::class, $context);
         $this->assertEquals($report->get_name(), 'Payments');
+        $this->output_assert($report->output());
     }
 
     /**
@@ -101,8 +117,12 @@ final class reports_test extends \advanced_testcase {
      * @covers \report_payments\reportbuilder\local\entities\payment
      */
     public function test_course(): void {
-        $report = system_report_factory::create(payments_course::class, \context_course::instance($this->course->id));
+        global $PAGE;
+        $context = context_course::instance($this->course->id);
+        $report = system_report_factory::create(payments_course::class, $context);
         $this->assertEquals($report->get_name(), 'Payments');
+        $PAGE->set_url(new \moodle_url('/report/payments/index.php', ['courseid' => $this->course->id]));
+        $this->output_assert($report->output());
     }
 
     /**
@@ -112,8 +132,28 @@ final class reports_test extends \advanced_testcase {
      * @covers \report_payments\reportbuilder\local\entities\payment
      */
     public function test_user(): void {
-        $report = system_report_factory::create(payments_user::class, \context_user::instance($this->userid));
+        global $PAGE;
+        $context = context_user::instance($this->userid);
+        $report = system_report_factory::create(payments_user::class, $context);
         $this->assertEquals($report->get_name(), 'Payments');
+        $PAGE->set_url(new \moodle_url('/report/payments/index.php', ['userid' => $this->userid]));
+        $out = $report->output();
+        $this->assertStringContainsString('course', $out);
+        $this->output_assert($out);
+    }
+
+    /**
+     * Test the output.
+     *
+     * @param string $out
+     */
+    private function output_assert(string $out): void {
+        $this->assertStringNotContainsString('Nothing to display', $out);
+        $this->assertEquals(1, substr_count($out, 'paypal'));
+        $this->assertStringContainsString('filters', $out);
+        $this->assertStringContainsString('download', $out);
+        $this->assertStringContainsString('currency', $out);
+        $this->assertStringContainsString('amount', $out);
     }
 
     /**
