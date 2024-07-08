@@ -18,7 +18,7 @@
  * Payments datasource
  *
  * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
+ * @copyright  2023 Medical Access Uganda Limited
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,7 +36,7 @@ use report_payments\reportbuilder\local\entities\payment;
  * Payments datasource
  *
  * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
+ * @copyright  2023 Medical Access Uganda Limited
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -66,8 +66,7 @@ class payments extends datasource {
         $this->add_entity($user->add_join(
             "LEFT JOIN {user} {$useralias} ON {$useralias}.id = {$mainalias}.userid
              LEFT JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid
-             LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid
-                AND {$enrolalias}.enrol = {$mainalias}.paymentarea"
+             LEFT JOIN {enrol} {$enrolalias} ON {$enrolalias}.id = {$userenrolalias}.enrolid"
         ));
 
         $this->add_entity($course->add_join(

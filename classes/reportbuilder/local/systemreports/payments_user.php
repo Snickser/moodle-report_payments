@@ -18,7 +18,7 @@
  * User payments
  *
  * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
+ * @copyright  2023 Medical Access Uganda Limited
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,7 +36,7 @@ use report_payments\reportbuilder\local\entities\payment;
  * User payments
  *
  * @package    report_payments
- * @copyright  Medical Access Uganda Limited (e-learning.medical-access.org)
+ * @copyright  2023 Medical Access Uganda Limited
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -57,9 +57,6 @@ class payments_user extends system_report {
         $enrol = new enrolment();
         $enrolalias = $enrol->get_table_alias('enrol');
         $userenrolalias = $enrol->get_table_alias('user_enrolments');
-        $enrol->add_join("INNER JOIN {user_enrolments} {$userenrolalias} ON {$userenrolalias}.userid = {$mainalias}.userid");
-        $this->add_entity($enrol);
-        $this->add_base_condition_simple("{$userenrolalias}.userid", $context->instanceid);
 
         $course = new course();
         $coursealias = $course->get_table_alias('course');
