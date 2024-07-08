@@ -30,7 +30,7 @@ $plugin->component = 'report_payments';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->supported = [402, 404];
 $plugin->requires = 2023042400;
-$plugin->release = 'v4.4.1';
+$plugin->release = 'v5';
 
 $plugin->dependencies = [
     'mod_gwpayments' => 3024043000,
