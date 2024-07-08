@@ -18,7 +18,7 @@
  * Tests for payments report events.
  *
  * @package   report_payments
- * @copyright 2023 Medical Access Uganda Limited
+ * @copyright Medical Access Uganda Limited (e-learning.medical-access.org)
  * @author    Renaat Debleu <info@eWallah.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +30,7 @@ namespace report_payments\event;
  * Class for tests related to payments report events.
  *
  * @package   report_payments
- * @copyright 2020 Medical Access Uganda Limited
+ * @copyright Medical Access Uganda Limited (e-learning.medical-access.org)
  * @author    Renaat Debleu <info@eWallah.net>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -39,6 +39,7 @@ final class event_test extends \advanced_testcase {
      * Setup testcase.
      */
     public function setUp(): void {
+        parent::setUp();
         $this->setAdminUser();
         $this->resetAfterTest();
     }
@@ -75,7 +76,7 @@ final class event_test extends \advanced_testcase {
         $event = end($events);
         $this->assertInstanceOf('\report_payments\event\report_viewed', $event);
         $this->assertEquals($context, $event->get_context());
-        $this->assertStringContainsString('report for the category', $event->get_description());
+        $this->assertStringContainsString('viewed the payments report for the category', $event->get_description());
         $url = new \moodle_url('/report/payments/index.php', ['categoryid' => $course->category]);
         $this->assertEquals($url, $event->get_url());
         $this->assertEquals('Payments report viewed', $event->get_name());
