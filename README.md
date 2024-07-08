@@ -1,3 +1,7 @@
+# Внимание, работает только совместно с этими модулями
++ "Зачисление за оплату" [enrol_fee](https://github.com/Snickser/moodle-enrol_fee/tree/dev).
++ "Payment module" [mod_gwpayments](https://github.com/Snickser/moodle-mod_gwpayments/tree/dev).
+
 # moodle-report_payments
 
 This report helps admins and managers to get a better view who payed for which course.
