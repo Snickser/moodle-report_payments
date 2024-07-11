@@ -146,7 +146,6 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
              else return false;
             });
 
-
         // Payment success.
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
