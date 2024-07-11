@@ -45,6 +45,9 @@ class payments_global extends system_report {
      * Initialise report, we need to set the main table, load our entities and set columns/filters
      */
     protected function initialise(): void {
+	global $DB;
+        $dbman = $DB->get_manager();
+
         $context = $this->get_context();
 
         $main = new payment();
@@ -95,12 +98,23 @@ class payments_global extends system_report {
 
         $course = new course();
         $coursealias = $course->get_table_alias('course');
-        $course->add_join("LEFT JOIN {enrol_fee} fee on fee.paymentid={$mainalias}.id");
-        $course->add_join("LEFT JOIN {gwpayments} gwp on gwp.id={$mainalias}.itemid");
-        $course->add_join("LEFT JOIN {course} {$coursealias} on " .
-           "({$coursealias}.id=fee.courseid or {$coursealias}.id=gwp.course)");
-        $this->add_entity($course);
 
+if ($dbman->table_exists('enrol_fee')) {
+        $course->add_join("LEFT JOIN {enrol_fee} fee on fee.paymentid={$mainalias}.id");
+        $wr[] = "{$coursealias}.id=fee.courseid";
+}
+if ($dbman->table_exists('gwpayments')) {
+        $course->add_join("LEFT JOIN {gwpayments} gwp on gwp.id={$mainalias}.itemid");
+        $wr[] = "{$coursealias}.id=gwp.course";
+}
+
+if(isset($wr)){
+        $course->add_join("LEFT JOIN {course} {$coursealias} on (".implode(' or ',$wr).")");
+} else {
+        $course->add_join("LEFT JOIN {course} {$coursealias} on ''");
+}
+
+        $this->add_entity($course);
 
 
         $this->add_columns();
