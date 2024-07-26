@@ -121,6 +121,9 @@ if($dbman->table_exists('paygw_payanyway')){
 if($dbman->table_exists('paygw_cryptocloud')){
     $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_cryptocloud ";
 }
+if($dbman->table_exists('paygw_yoomoney')){
+    $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_yoomoney ";
+}
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
         // Component column.
