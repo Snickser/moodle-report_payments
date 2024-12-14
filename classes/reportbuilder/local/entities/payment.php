@@ -121,6 +121,9 @@ if($dbman->table_exists('paygw_payanyway')){
 if($dbman->table_exists('paygw_cryptocloud')){
     $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_cryptocloud ";
 }
+if($dbman->table_exists('paygw_yoomoney')){
+    $str .= " union select paymentid,courseid,success,0 recurrent from mdl_paygw_yoomoney ";
+}
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
         // Component column.
@@ -141,7 +144,9 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             ->add_callback(function (?int $value, \stdClass $row): string {
              if($value>0){ 
                 return '<b style="color: red;">' . new lang_string('yes'). '</b>' .
-                '<br>'.'<a href="?cancel=' . $row->id .'&sesskey='. sesskey() . '">' . new lang_string('cancel') . '</a>';
+                '<br>'.userdate($value, "%d/%m/%y %k:%M") . '<br>' .
+                '<a href="?cancel=' . $row->id .'&sesskey='. sesskey() . '">' . new lang_string('cancel') .
+                '</a>';
              }
              else return false;
             });
