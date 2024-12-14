@@ -34,5 +34,5 @@ $plugin->release = 'v5';
 
 $plugin->dependencies = [
     'mod_gwpayments' => 3024043000,
-    'enrol_fee' => 3024070800,
+    'enrol_yafee' => 2024121400,
 ];
