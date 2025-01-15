@@ -163,7 +163,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
             !isset($value) ? $value=-1 : false;
             switch ($value) {
         	case 0:
-        	    return '<div style="color: red;">' . new lang_string('unfinished') . '</div>';
+        	    return '<div style="color: grey;">' . new lang_string('unfinished') . '</div>';
         	    break;
         	case 1:
         	    return '<b style="color: green;">' . new lang_string('success') . '</b>';
@@ -175,7 +175,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
         	    return new lang_string('ok');
         	    break;
         	default:
-        	    return new lang_string('no');
+        	    return '<div style="color: red;">' . new lang_string('no') . '</div>';
         	}
             });
 
