@@ -166,7 +166,7 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
         	    return '<div style="color: grey;">' . new lang_string('unfinished') . '</div>';
         	    break;
         	case 1:
-        	    return '<b style="color: green;">' . new lang_string('success') . '</b>';
+        	    return '<b style="color: #00B000;">' . new lang_string('success') . '</b>';
         	    break;
         	case 2:
         	    return '<b style="color: blue;">' . new lang_string('password') . '</b>';
