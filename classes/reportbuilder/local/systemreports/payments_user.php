@@ -64,8 +64,8 @@ class payments_user extends system_report {
         $course = new course();
         $coursealias = $course->get_table_alias('course');
 
-if ($dbman->table_exists('enrol_fee')) {
-        $course->add_join("LEFT JOIN {enrol_fee} fee on fee.paymentid={$mainalias}.id");
+if ($dbman->table_exists('enrol_yafee')) {
+        $course->add_join("LEFT JOIN {enrol_yafee} fee on fee.paymentid={$mainalias}.id");
         $wr[] = "{$coursealias}.id=fee.courseid";
 }
 if ($dbman->table_exists('gwpayments')) {
