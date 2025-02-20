@@ -39,6 +39,10 @@ $filter = optional_param('filter', null, PARAM_TEXT);
 $recurrent = optional_param('cancel', null, PARAM_INT);
 
 
+if (!is_siteadmin()) {
+    $userid = $USER->id;
+}
+
 if ($courseid == 1) {
     if ($categoryid != 0) {
         $context = \context_coursecat::instance($categoryid);
@@ -59,7 +63,6 @@ if ($courseid == 1) {
     $classname = payments_course::class;
 }
 require_login();
-
 
 // Delete recurrent payment from database.
 if ($recurrent > 0) {
@@ -83,7 +86,6 @@ if ($recurrent > 0) {
     }
     redirect(new \moodle_url('/report/payments/index.php', $params));
 }
-
 
 $PAGE->set_url(new \moodle_url('/report/payments/index.php', $params));
 $PAGE->set_pagelayout('report');
