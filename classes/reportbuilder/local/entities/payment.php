@@ -127,6 +127,9 @@ if($dbman->table_exists('paygw_yoomoney')){
 if($dbman->table_exists('paygw_bepaid')){
     $str .= " union select paymentid,courseid,success,recurrent from mdl_paygw_bepaid ";
 }
+if($dbman->table_exists('paygw_bank')){
+	    $str .= " union select paymentid,0 courseid,status success,0 recurrent from mdl_paygw_bank ";
+}
 $str .= ") rb ON rb.paymentid={$tablealias}.id";
 
         // Component column.
@@ -158,12 +161,12 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
         $columns[] = (new column('success', new lang_string('status'), $name))
             ->add_joins($this->get_joins())
             ->add_join($str)
-            ->set_type(column::TYPE_INTEGER)
+            ->set_type(column::TYPE_TEXT)
             ->add_field("rb.success")
             ->add_attributes(['class' => 'text-center'])
             ->set_is_sortable(true)
-            ->add_callback(function (?int $value): string {
-            !isset($value) ? $value=-1 : false;
+            ->add_callback(function (?string $value): string {
+		    !isset($value) ? $value=-1 : false;
             switch ($value) {
         	case 0:
         	    return '<div style="color: grey;">' . new lang_string('unfinished') . '</div>';
@@ -177,6 +180,9 @@ $str .= ") rb ON rb.paymentid={$tablealias}.id";
         	case 3:
         	    return new lang_string('ok');
         	    break;
+		case 'A':
+    		    return new lang_string('ok');
+                    break;
         	default:
         	    return '<div style="color: red;">' . new lang_string('no') . '</div>';
         	}
