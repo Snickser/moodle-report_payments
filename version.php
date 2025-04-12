@@ -25,12 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 3025022800;
+$plugin->version = 3025041200;
 $plugin->component = 'report_payments';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->supported = [402, 405];
 $plugin->requires = 2023042400;
-$plugin->release = 'v5';
+$plugin->release = '5.0';
 
 $plugin->dependencies = [
     'mod_gwpayments' => 3024043000,
